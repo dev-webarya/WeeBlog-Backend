@@ -6,7 +6,7 @@ services:
   # ==============================
   blog-api:
     build: .
-    container_name: blog-api-container
+    container_name: weeblog-api-container
     ports:
       - "8027:8080" # Host Port : Container Port
     restart: always
