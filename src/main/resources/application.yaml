@@ -1,0 +1,74 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: blog
+  config:
+    import: optional:file:.env[.properties], optional:file:blog_backend_v1/.env[.properties]
+
+  # Jackson Serialization
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+
+  # Mail Configuration (Gmail SMTP)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+# Swagger / OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# Blog Application Custom Config
+blog:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+  otp:
+    length: 6
+    expiry-minutes: 10
+    max-attempts: 5
+    resend-cooldown-seconds: 60
+  pagination:
+    default-page: 0
+    default-size: 10
+    max-size: 50
+  rate-limit:
+    comments-per-minute: 5
+    reactions-per-minute: 10
+  frontend:
+    url: ${FRONTEND_URL}
+  notification:
+    enabled: false  # Set to true to enable hourly subscriber email notifications
+  jwt:
+    secret: ${JWT_SECRET}
+    expiry-hours: ${JWT_EXPIRY_HOURS}
+
+# Razorpay Configuration
+razorpay:
+  key-id: ${RAZORPAY_KEY_ID}
+  key-secret: ${RAZORPAY_KEY_SECRET}

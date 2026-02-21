@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # ==============================
+  # Blog Application Service
+  # ==============================
+  blog-api:
+    build: .
+    container_name: blog-api-container
+    ports:
+      - "8027:8080" # Host Port : Container Port
+    restart: always
+    environment:
+      # Server Configuration
+      - SERVER_PORT=8080
+
+      # MongoDB Configuration (From .env)
+      - MONGODB_URI=${MONGODB_URI}
+
+      # Mail Configuration (From .env)
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+
+      # Admin Credentials (From .env or defaults)
+      - BLOG_ADMIN_USERNAME=${ADMIN_USERNAME}
+      - BLOG_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+
+      # Frontend URL
+      - BLOG_FRONTEND_URL=${FRONTEND_URL}
+
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRY_HOURS=${JWT_EXPIRY_HOURS}
+
+      # Razorpay Configuration
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+
+    # Load environment variables from .env file
+    env_file:
+      - .env
+
+    # Healthcheck to ensure the app is running
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
