@@ -2,7 +2,7 @@
 
 ## Architecture
 
-Spring Boot **3.4.2** modular monolith with **MongoDB**, Java 17, Swagger (OpenAPI).
+Spring Boot **3.4.2** cool modular monolith with **MongoDB**, Java 17, Swagger (OpenAPI).
 
 ```
 com.blogapp/
