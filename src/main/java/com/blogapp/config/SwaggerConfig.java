@@ -21,7 +21,7 @@ public class SwaggerConfig {
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Blog Admin")
-                                .email("sales.webarya@gmail.com")))
+                                .email("weeblogs.info@gmail.com")))
                 .servers(List.of(
                         new Server().url("https://api.weeblogs.com").description("Production Server (HTTPS)"),
                         new Server().url("http://93.127.194.118:8027").description("VPS Direct Access"),
