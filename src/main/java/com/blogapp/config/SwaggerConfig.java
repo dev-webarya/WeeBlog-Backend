@@ -17,14 +17,15 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Blog Application API")
-                        .description("REST API documentation for the Blog Module — supports blog listing, "
-                                + "submission with email OTP verification, reactions, comments, "
-                                + "subscriptions, and admin moderation.")
+                        .description("REST API documentation for WeeBlog - Production Environment")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Blog Admin")
                                 .email("sales.webarya@gmail.com")))
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Local Development")));
+                        new Server().url("https://api.weeblogs.com").description("Production Server (HTTPS)"),
+                        new Server().url("http://93.127.194.118:8027").description("VPS Direct Access"),
+                        new Server().url("http://localhost:8080").description("Local Development")
+                ));
     }
 }
