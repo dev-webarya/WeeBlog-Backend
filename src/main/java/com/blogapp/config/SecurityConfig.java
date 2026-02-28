@@ -43,51 +43,25 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // Public endpoints - blogs, reactions, comments
                         .requestMatchers(HttpMethod.GET, "/api/blogs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/blogs/*/reaction").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blogs/*/reaction").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blogs/*/comments").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/blogs/*/comments").permitAll()
-
-                        // Public endpoints - sections & subsections
                         .requestMatchers(HttpMethod.GET, "/api/sections/**").permitAll()
-
-                        // Public endpoints - auth (user login/register)
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // Public endpoints - subscription
                         .requestMatchers("/api/blogs/subscribe/**").permitAll()
-
-                        // Public endpoints - submission
                         .requestMatchers("/api/blogs/submission/**").permitAll()
-
-                        // Public endpoints - pricing
                         .requestMatchers(HttpMethod.GET, "/api/pricing/**").permitAll()
-
-                        // Swagger / API docs - public
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-
-                        // Actuator - public
                         .requestMatchers("/actuator/**").permitAll()
-
-                        // User-authenticated endpoints (JWT)
                         .requestMatchers("/api/account/**").authenticated()
                         .requestMatchers("/api/checkout/**").authenticated()
-
-                        // Admin endpoints - require ADMIN role (HTTP Basic)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // All other requests - authenticated
                         .anyRequest().authenticated())
-                // JWT filter runs first — sets user auth from Bearer token
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // HTTP Basic remains as fallback for admin
-                .httpBasic(basic -> {
-                });
+                .httpBasic(basic -> {});
 
         return http.build();
     }
@@ -95,9 +69,19 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
+        
+        // Allowed Origins: VPS IP, Production Domains, and Netlify
+        config.setAllowedOrigins(List.of(
+            "https://weeblogs.com",
+            "https://www.weeblogs.com",
+            "https://api.weeblogs.com",
+            "http://93.127.194.118",
+            "http://localhost:3000",
+            "http://localhost:5173"
+        ));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
