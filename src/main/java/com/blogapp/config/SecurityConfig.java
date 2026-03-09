@@ -71,24 +71,25 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allowed Origins: VPS IP, Production Domains, and Netlify
-        config.setAllowedOrigins(List.of(
-                "https://weeblogs.com",
-                "https://www.weeblogs.com",
-                "https://api.weeblogs.com",
-                "http://93.127.194.118",
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:8081",
-                "http://localhost:8080"));
+        // Allow all origins
+        config.setAllowedOriginPatterns(List.of("*"));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
+        // Allow all HTTP methods
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+
+        // Allow all headers
+        config.setAllowedHeaders(List.of("*"));
+
+        // Allow credentials (JWT / cookies / Authorization headers)
         config.setAllowCredentials(true);
+
+        // Cache CORS response for 1 hour
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 
