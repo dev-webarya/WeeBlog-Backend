@@ -61,7 +61,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(basic -> {});
+                .httpBasic(basic -> {
+                });
 
         return http.build();
     }
@@ -69,16 +70,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        
+
         // Allowed Origins: VPS IP, Production Domains, and Netlify
         config.setAllowedOrigins(List.of(
-            "https://weeblogs.com",
-            "https://www.weeblogs.com",
-            "https://api.weeblogs.com",
-            "http://93.127.194.118",
-            "http://localhost:3000",
-            "http://localhost:5173"
-        ));
+                "https://weeblogs.com",
+                "https://www.weeblogs.com",
+                "https://api.weeblogs.com",
+                "http://93.127.194.118",
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://localhost:8081",
+                "http://localhost:8080"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
