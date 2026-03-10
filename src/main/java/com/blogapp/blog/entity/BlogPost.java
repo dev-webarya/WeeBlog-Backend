@@ -46,9 +46,11 @@ public class BlogPost {
 
     // Taxonomy
     @Indexed
+    @org.springframework.data.mongodb.core.mapping.Field(targetType = org.springframework.data.mongodb.core.mapping.FieldType.OBJECT_ID)
     private String sectionId;
 
     @Indexed
+    @org.springframework.data.mongodb.core.mapping.Field(targetType = org.springframework.data.mongodb.core.mapping.FieldType.OBJECT_ID)
     private String subsectionId;
 
     private String authorName;
@@ -59,6 +61,7 @@ public class BlogPost {
     private String authorMobile;
 
     @Indexed
+    @org.springframework.data.mongodb.core.mapping.Field(targetType = org.springframework.data.mongodb.core.mapping.FieldType.OBJECT_ID)
     private String authorUserId; // links to User entity (null for pre-auth submissions)
 
     // Admin quality rating (1-10), drives paywall gating

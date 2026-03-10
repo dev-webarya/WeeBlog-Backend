@@ -1,5 +1,6 @@
 package com.blogapp.admin.controller;
 
+import com.blogapp.admin.dto.request.AdminEditBlogRequest;
 import com.blogapp.admin.dto.request.ApproveBlogRequest;
 import com.blogapp.admin.dto.request.RejectBlogRequest;
 import com.blogapp.blog.dto.request.CreateBlogRequest;
@@ -88,12 +89,12 @@ public class AdminBlogController {
         }
 
         @PatchMapping("/blogs/{id}")
-        @Operation(summary = "Edit a blog", description = "Admin can edit blog content before or after publishing")
+        @Operation(summary = "Edit a blog", description = "Admin can edit blog content before or after publishing including internal rating")
         public ResponseEntity<BlogDetailResponse> editBlog(
                         @Parameter(description = "Blog ID") @PathVariable String id,
-                        @Valid @RequestBody CreateBlogRequest request) {
+                        @Valid @RequestBody AdminEditBlogRequest request) {
 
-                BlogPost updatedBlog = blogService.updateBlog(id, request);
+                BlogPost updatedBlog = blogService.updateBlogAsAdmin(id, request);
                 return ResponseEntity.ok(blogService.getBlogById(updatedBlog.getId()));
         }
 

@@ -29,6 +29,8 @@ public interface BlogService {
 
     BlogPost updateBlog(String id, CreateBlogRequest request);
 
+    BlogPost updateBlogAsAdmin(String id, com.blogapp.admin.dto.request.AdminEditBlogRequest request);
+
     PageResponse<BlogDetailResponse> getAdminBlogs(String status, int page, int size);
 
     void incrementViewCount(String id);

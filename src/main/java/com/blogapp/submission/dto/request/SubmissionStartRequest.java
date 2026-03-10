@@ -40,6 +40,14 @@ public class SubmissionStartRequest {
     @Schema(description = "Tags", example = "[\"physics\", \"igcse\"]")
     private List<String> tags;
 
+    @NotBlank(message = "Section ID is required")
+    @Schema(description = "Section ID", example = "64b0f1a9e4b0...")
+    private String sectionId;
+
+    @NotBlank(message = "Subsection ID is required")
+    @Schema(description = "Subsection ID", example = "64b0f1a9e4b1...")
+    private String subsectionId;
+
     // Author identity
     @Schema(description = "Author name", example = "John Doe")
     private String authorName;

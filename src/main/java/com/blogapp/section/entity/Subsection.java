@@ -25,6 +25,7 @@ public class Subsection {
     private String id;
 
     @Indexed
+    @org.springframework.data.mongodb.core.mapping.Field(targetType = org.springframework.data.mongodb.core.mapping.FieldType.OBJECT_ID)
     private String sectionId;
 
     @Indexed

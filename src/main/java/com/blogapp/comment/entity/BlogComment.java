@@ -23,6 +23,7 @@ public class BlogComment {
     private String id;
 
     @Indexed
+    @org.springframework.data.mongodb.core.mapping.Field(targetType = org.springframework.data.mongodb.core.mapping.FieldType.OBJECT_ID)
     private String blogId;
 
     private String name;

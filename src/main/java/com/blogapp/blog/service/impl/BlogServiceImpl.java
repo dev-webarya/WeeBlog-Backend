@@ -228,6 +228,14 @@ public class BlogServiceImpl implements BlogService {
         blog.setStatus(BlogStatus.PENDING);
         blog.setSubmittedAt(LocalDateTime.now());
 
+        // Explicitly map section and subsection from request if mapper missed them
+        if (request.getSectionId() != null) {
+            blog.setSectionId(request.getSectionId());
+        }
+        if (request.getSubsectionId() != null) {
+            blog.setSubsectionId(request.getSubsectionId());
+        }
+
         // Ensure unique slug
         String baseSlug = SlugUtil.generateSlug(request.getTitle());
         String slug = baseSlug;
@@ -314,6 +322,40 @@ public class BlogServiceImpl implements BlogService {
         blog.setSubsectionId(request.getSubsectionId());
 
         log.info("Blog updated: {}", id);
+        return blogPostRepository.save(blog);
+    }
+
+    @Override
+    public BlogPost updateBlogAsAdmin(String id, com.blogapp.admin.dto.request.AdminEditBlogRequest request) {
+        BlogPost blog = blogPostRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Blog", "id", id));
+
+        blog.setTitle(request.getTitle());
+        blog.setExcerpt(request.getExcerpt());
+        blog.setContentHtml(HtmlSanitizer.sanitize(request.getContentHtml()));
+        blog.setContentJson(request.getContentJson());
+        blog.setFeaturedImageUrl(request.getFeaturedImageUrl());
+        blog.setTags(request.getTags());
+        blog.setSectionId(request.getSectionId());
+        blog.setSubsectionId(request.getSubsectionId());
+
+        if (request.getInternalRating() != null) {
+            blog.setInternalRating(request.getInternalRating());
+        }
+
+        // Re-calculate paywall content if premium
+        if (blog.getInternalRating() != null && blog.getInternalRating() > 6
+                && blog.getContentHtml() != null) {
+            String[] parts = ContentSplitter.split(blog.getContentHtml());
+            blog.setContentPart1Html(parts[0]);
+            blog.setContentPart2Html(parts[1]);
+        } else {
+            // Remove premium gating
+            blog.setContentPart1Html(null);
+            blog.setContentPart2Html(null);
+        }
+
+        log.info("Blog updated by admin: {}, new rating: {}", id, blog.getInternalRating());
         return blogPostRepository.save(blog);
     }
 
